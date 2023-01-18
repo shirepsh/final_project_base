@@ -15,40 +15,59 @@ class Profile(models.Model):
 
 # category model
 class Category(models.Model):
-    name = models.CharField(max_length=255, null=True, blank=True)
-    description = models.CharField(max_length=255, null=True, blank=True)
+    name = models.CharField(max_length=255, null=False, blank=False)
+    description = models.CharField(max_length=255, null=False, blank=False)
     image = models.ImageField(null=True,blank=True,default='/placeholder.png')
 
     def __str__(self):
         return self.name
 
-
 # product model
 class Product(models.Model):
-    name = models.CharField(max_length=255)
-    price = models.IntegerField(null=True, blank=True)
+    name = models.CharField(max_length=255, null=False, blank=False)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
     image = models.ImageField(null=True,blank=True,default='/placeholder.png')
     category = models.ForeignKey(Category, on_delete=models.PROTECT )
+
 
     def __str__(self):
         return self.name
 
 # order model
 class Order(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    order_number = models.IntegerField(null=True, blank=True)
-    ordering_customer = models.ForeignKey(User, on_delete=models.SET_NULL, null = True, related_name = 'customer')
-    customer_address = models.ForeignKey(Profile, on_delete = models.SET_NULL, null = True)
-    quantity = models.IntegerField(null=True, blank=True)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    order_number = models.IntegerField(null=False, blank=False, unique=True)
+    product = models.ManyToManyField(Product)
+    # quantity = models.IntegerField(null=False, blank=False)
+    ordering_customer = models.ForeignKey(User, on_delete=models.PROTECT, related_name = 'customer')
+    shipping_country = models.CharField(max_length=255, null=False, blank=False)
+    shipping_city = models.CharField(max_length=255, null=False, blank=False)
+    shipping_zipCode = models.IntegerField(null=False, blank=False)
 
     def _str_(self):
-        return self.order_number
+        return str(self.ordering_customer)
+
+# # class order items
+# class OrderItem(models.Model):
+#     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     quantity = models.IntegerField()
 
 
-# # review model
-# class Reviews(models.Model):
-    
+# review model
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete = models.PROTECT, null = False)
+    order_id = models.ForeignKey(Order, on_delete = models.PROTECT, null = False)
+    productReview = models.ForeignKey(Product, on_delete = models.PROTECT, null = False)
+    RATING_CHOICES = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+    )
+    rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES)
+    comment = models.CharField(max_length = 500, null = True)
 
-
-    
-
+    def _str_(self):
+        return self.productReview

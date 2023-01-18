@@ -1,6 +1,18 @@
 from rest_framework import serializers
 from .models import  *
 
+#profile model serializers
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ( "__all__")
+
+    def create(self, validated_data):
+        user = self.context['user']
+        print(user)
+        return Profile.objects.create(**validated_data, user=user)
+
+
 #category model serializers
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,7 +25,7 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ( "__all__")
 
-#cart model serializers
+#order model serializers
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -24,13 +36,13 @@ class OrderSerializer(serializers.ModelSerializer):
         print(user)
         return Order.objects.create(**validated_data, user=user)
 
-#profile model serializers
-class ProfileSerializer(serializers.ModelSerializer):
+#review model serializers
+class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profile
+        model = Review
         fields = ( "__all__")
 
     def create(self, validated_data):
         user = self.context['user']
         print(user)
-        return Profile.objects.create(**validated_data, user=user)
+        return Review.objects.create(**validated_data, user=user)

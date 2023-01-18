@@ -8,7 +8,7 @@ from .serializers import *
 from .models import *
 
 # /////////////////// full crud products - when post, delete, put just for admins
-@api_view(["GET","POST","DELETE","PUT"])
+@api_view(["GET"])
 def get_products(request,_id=-1):
     if request.method == "GET":
         if _id == -1:
@@ -16,10 +16,9 @@ def get_products(request,_id=-1):
             return Response(status=status.HTTP_200_OK, data=serializer.data)
         else:
             try:
-                product = Category.objects.get(id=_id)
                 serializer = ProductSerializer(Product.objects.get(id=_id))
             except:
-                 return Response(status=status.HTTP_400_BAD_REQUEST, data="teacher nor found")
+                 return Response(status=status.HTTP_400_BAD_REQUEST, data="product not found")
             return Response(status=status.HTTP_200_OK, data=serializer.data)
 
 
