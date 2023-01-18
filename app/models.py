@@ -15,8 +15,8 @@ class Profile(models.Model):
 
 # category model
 class Category(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
+    name = models.CharField(max_length=255, null=True, blank=True)
+    description = models.CharField(max_length=255, null=True, blank=True)
     image = models.ImageField(null=True,blank=True,default='/placeholder.png')
 
     def __str__(self):
@@ -45,16 +45,10 @@ class Order(models.Model):
         return self.order_number
 
 
-# # cart model
-# class Cart(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     quantity = models.IntegerField(null=True, blank=True)
-
-#     def __str__(self):
-#         return self.user
+# # review model
+# class Reviews(models.Model):
+    
 
 
     
-
 

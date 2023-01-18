@@ -14,15 +14,15 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ( "__all__")
 
 #cart model serializers
-class CartSerializer(serializers.ModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Cart
+        model = Order
         fields = ( "__all__")
 
     def create(self, validated_data):
         user = self.context['user']
         print(user)
-        return Cart.objects.create(**validated_data, user=user)
+        return Order.objects.create(**validated_data, user=user)
 
 #profile model serializers
 class ProfileSerializer(serializers.ModelSerializer):
